@@ -85,8 +85,15 @@ function Home() {
   const categories = ["All", ...new Set(works.map((work) => work.category))];
   const [filter, setFilter] = useState("All");
   const visible = filter === "All" ? works : works.filter((work) => work.category === filter);
+  const priceNote = /prices coming soon/i.test(studio.negotiateNote) ? "" : studio.negotiateNote;
   const chosen = works.filter((work) => work.showInHero).slice(0, 6);
   const heroWorks = chosen.length > 0 ? chosen : works.slice(0, 3);
+
+  useEffect(() => {
+    document.querySelectorAll("#shop .reveal-card, #shop .reveal-img").forEach((node) => {
+      node.classList.add("is-in");
+    });
+  }, [filter]);
 
   return (
     <>
@@ -135,7 +142,7 @@ function Home() {
               <p className="reveal text-xs font-medium tracking-[0.22em] text-gold">SHOP</p>
               <h2 className="reveal font-display text-5xl">Available creations</h2>
             </div>
-            <p className="max-w-xs text-base text-muted">{studio.negotiateNote}</p>
+            {priceNote ? <p className="max-w-xs text-base text-muted">{priceNote}</p> : null}
           </div>
           <div className="mt-6 flex flex-wrap gap-2">
             {categories.map((category) => (

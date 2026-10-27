@@ -142,7 +142,9 @@ function PiecePage() {
             ) : null}
           </dl>
           {piece.story ? <p className="mt-6 text-muted">{piece.story}</p> : null}
-          <p className="mt-4 text-sm text-muted">{studio.negotiateNote}</p>
+          {studio.negotiateNote.trim() && !/prices coming soon/i.test(studio.negotiateNote) ? (
+            <p className="mt-4 text-sm text-muted">{studio.negotiateNote}</p>
+          ) : null}
           <p className="text-sm text-muted">{studio.shippingNote}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             {piece.status === "available" && piece.stripeUrl ? (
