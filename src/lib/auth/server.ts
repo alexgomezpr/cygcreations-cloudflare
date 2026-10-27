@@ -33,7 +33,6 @@ import { betterAuth } from "better-auth";
 import { bearer, genericOAuth, magicLink } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { getCookie } from "@tanstack/react-start/server";
-import { randomBytes } from "node:crypto";
 import { d1Dialect } from "../d1-dialect";
 import { emailAndPasswordEnabled } from "./email-password";
 import { sendOwnerReset, sendOwnerSetup } from "./owner-mail.server";
@@ -48,12 +47,8 @@ import {
   PREVIEW_CLIENT_SECRET,
 } from "./preview";
 
-const globalAuthRef = globalThis as typeof globalThis & {
-  __grokAuthPreviewSecret__?: string;
-};
 function previewAuthSecret(): string {
-  globalAuthRef.__grokAuthPreviewSecret__ ??= randomBytes(32).toString("hex");
-  return globalAuthRef.__grokAuthPreviewSecret__;
+  return "cygcreations-cloudflare-auth-secret-v1";
 }
 
 const env = (key: string): string | undefined => {

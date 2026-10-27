@@ -54,7 +54,13 @@ function toSql(runQuery: typeof run): Sql {
 
 async function ready() {
   const db = await getD1();
-  await db.exec(schemaSql);
+  const statements = schemaSql
+    .split(/;\s*(?:\r?\n|$)/)
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0 && !part.startsWith("--"));
+  for (const statement of statements) {
+    await db.prepare(statement).run();
+  }
 }
 
 export async function createD1Sql(): Promise<Sql> {
