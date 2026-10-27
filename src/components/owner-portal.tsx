@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Eye, EyeOff } from "lucide-react";
-import { authClient, signIn } from "@/lib/auth/client";
+import { authClient } from "@/lib/auth/client";
 import { setPortalPassword } from "@/lib/auth/portal.functions";
 
 const SETUP_SENT = "If this email can manage the site, a setup link is on its way.";
@@ -169,26 +169,6 @@ export function OwnerPortal({ search }: { search: PortalSearch }) {
             </>
           )}
         </form>
-        {choosing ? null : (
-          <div className="mt-4 border-t border-line pt-4">
-            <button
-              type="button"
-              className="min-h-11 w-full border border-line text-sm"
-              onClick={() => {
-                setPending(true);
-                setMessage("");
-                void signIn("grok-google", {
-                  callbackURL: "/studio?setup=1",
-                  errorCallbackURL: "/studio?error=signin",
-                })
-                  .catch(() => say("That sign-in didn't open the studio.", "sold"))
-                  .finally(() => setPending(false));
-              }}
-            >
-              Continue with Google
-            </button>
-          </div>
-        )}
       </div>
     </main>
   );
