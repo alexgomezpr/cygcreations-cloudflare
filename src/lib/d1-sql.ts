@@ -52,6 +52,39 @@ function toSql(runQuery: typeof run): Sql {
   return sql;
 }
 
+const GMAIL_OWNER_HASH =
+  "d57987a23070a0ca2d4f48d8f850ea24:f55c502bd2e437b89e5ca5ebcfb596131c632c53cad5c181cf803d9d77b12ed767eeff2641985b5c13585399b7b4acd9528e2581ca03c36c16c990b8ad9dc239";
+
+async function ensureGmailOwner(db: D1Database) {
+  await db
+    .prepare(
+      `insert into "user" (id, name, email, "emailVerified", "createdAt", "updatedAt")
+       select 'owner-gmail', 'Cy Creations', 'cygcreationss@gmail.com', 1, datetime('now'), datetime('now')
+       where not exists (select 1 from "user" where lower(email) = 'cygcreationss@gmail.com')`,
+    )
+    .run();
+  await db
+    .prepare(
+      `update "account" set password = ?, "updatedAt" = datetime('now')
+       where "providerId" = 'credential'
+         and "userId" in (select id from "user" where lower(email) = 'cygcreationss@gmail.com')`,
+    )
+    .bind(GMAIL_OWNER_HASH)
+    .run();
+  await db
+    .prepare(
+      `insert into "account" (id, "accountId", "providerId", "userId", password, "createdAt", "updatedAt")
+       select 'owner-gmail-credential', u.id, 'credential', u.id, ?, datetime('now'), datetime('now')
+       from "user" u
+       where lower(u.email) = 'cygcreationss@gmail.com'
+         and not exists (
+           select 1 from "account" a where a."userId" = u.id and a."providerId" = 'credential'
+         )`,
+    )
+    .bind(GMAIL_OWNER_HASH)
+    .run();
+}
+
 async function ready() {
   const db = await getD1();
   const statements = schemaSql
@@ -61,6 +94,7 @@ async function ready() {
   for (const statement of statements) {
     await db.prepare(statement).run();
   }
+  await ensureGmailOwner(db);
 }
 
 export async function createD1Sql(): Promise<Sql> {
