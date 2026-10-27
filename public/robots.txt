@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /studio
+Disallow: /login
+Disallow: /api/
+
+Sitemap: https://cygcreations.com/sitemap.xml

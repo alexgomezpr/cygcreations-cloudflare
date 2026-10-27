@@ -1,0 +1,215 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-script: "Great Vibes", cursive;
+  --color-paper: #f7f4ef;
+  --color-cream: #efe8dc;
+  --color-ink: #262624;
+  --color-muted: #5e5a53;
+  --color-gold: #6e582b;
+  --color-gold-light: #f0e2c0;
+  --color-hibiscus: #b8333a;
+  --color-card: #fffefa;
+  --color-line: #e4dccf;
+  --color-sold: #3d463c;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  img {
+    max-width: 100%;
+  }
+  section[id] {
+    scroll-margin-top: calc(var(--site-header-h, 89px) + var(--grok-banner-h, 0px));
+  }
+}
+
+:root {
+  --grok-banner-h: 0px;
+  --site-header-h: 89px;
+  --site-header-slot: 89px;
+}
+
+.site-header-slot {
+  height: var(--site-header-slot, 89px);
+}
+.site-header {
+  position: fixed;
+  left: 0;
+  right: 0;
+}
+
+/* Touch widths: the banner, when shown, is a full-width bar. Stick under it and add nothing else. */
+@media (max-width: 1024px) {
+  .site-header {
+    top: var(--grok-banner-h, 0px);
+    padding-top: 0;
+  }
+}
+
+/* Desktop: the 56px clearance is only for the floating pill. */
+@media (min-width: 1025px) {
+  .site-header {
+    top: 0;
+    padding-top: 0;
+  }
+  html.has-grok-pill .site-header {
+    padding-top: 56px;
+  }
+}
+.site-logo {
+  height: 44px;
+  width: auto;
+}
+@media (min-width: 768px) {
+  .site-logo {
+    height: 56px;
+  }
+}
+.site-header.is-compact .site-header-bar {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+.site-header.is-compact .site-logo {
+  height: 32px;
+}
+@media (min-width: 768px) {
+  .site-header.is-compact .site-logo {
+    height: 40px;
+  }
+}
+
+.hero-strip {
+  min-width: 0;
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding-left: 1.25rem;
+  padding-right: 0;
+  scroll-padding-left: 1.25rem;
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-strip figure {
+    width: 300px;
+    max-width: 300px;
+  }
+}
+
+.gallery-tile img {
+  transition: transform 400ms ease;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .gallery-tile:hover img,
+  .gallery-tile:focus-visible img {
+    transform: scale(1.03);
+  }
+}
+
+.script-accent {
+  position: relative;
+  display: inline-block;
+}
+.script-accent .brush {
+  position: absolute;
+  left: 0;
+  bottom: -0.08em;
+  width: 100%;
+  height: 0.28em;
+  overflow: visible;
+  pointer-events: none;
+}
+.script-accent .brush path {
+  fill: none;
+  stroke: var(--color-hibiscus);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.paint-brush {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 22px;
+  height: 44px;
+  transform-origin: 50% 100%;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+}
+@media (min-width: 768px) {
+  .paint-brush {
+    width: 28px;
+    height: 56px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .js .reveal.is-in {
+    opacity: 1;
+    transform: none;
+    transition: opacity 600ms ease, transform 600ms ease;
+  }
+  .js .reveal-card {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 600ms ease, transform 600ms ease;
+    transition-delay: calc(var(--i, 0) * 80ms);
+  }
+  .js .reveal-card.is-in {
+    opacity: 1;
+    transform: none;
+  }
+  .js .reveal-img {
+    clip-path: inset(100% 0 0 0);
+  }
+  .js .reveal-card.is-in .reveal-img,
+  .js .reveal-img.is-in {
+    clip-path: inset(0);
+    transition: clip-path 900ms ease;
+  }
+  .js .script-accent .brush path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  .js .script-accent.is-in .brush path {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 2s ease-in-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .paint-brush {
+    display: none;
+  }
+}

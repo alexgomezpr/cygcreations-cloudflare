@@ -1,0 +1,14 @@
+node_modules/
+.output/
+.wrangler/
+.nitro/
+.vercel/
+screenshots/
+artifacts/
+.grok/**
+!.grok/app-env.json
+*.log
+
+attachments/
+.project_id
+screenshots/
